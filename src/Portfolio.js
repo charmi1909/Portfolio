@@ -4,7 +4,8 @@ import {
   Terminal, Code2, Database, BrainCircuit, LineChart, 
   Briefcase, GraduationCap, Mail, User,
   ExternalLink, Menu, X, ChevronRight,
-  CheckCircle2,LayoutTemplate, PenTool, Bug, Layers, Smartphone, FileCheck
+  CheckCircle2,LayoutTemplate, PenTool, Bug, Layers, Smartphone, FileCheck,
+  Sun, Moon
 } from "lucide-react";
 
 const GithubIcon = ({ size = 24, className = "" }) => (
@@ -40,7 +41,7 @@ const WelcomeScreen = ({ onComplete }) => {
     <motion.div 
       initial={{ y: 0 }}
       exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950 text-white"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-page text-ink"
     >
       <AnimatePresence mode="wait">
         <motion.div
@@ -51,7 +52,7 @@ const WelcomeScreen = ({ onComplete }) => {
           transition={{ duration: 0.2 }}
           className="text-4xl md:text-7xl font-bold flex items-center gap-4 tracking-tighter"
         >
-          <span className="w-3 h-3 md:w-5 md:h-5 rounded-full bg-teal-400 animate-pulse" />
+          <span className="w-3 h-3 md:w-5 md:h-5 rounded-full bg-accent animate-pulse" />
           {greetings[index]}
         </motion.div>
       </AnimatePresence>
@@ -65,6 +66,17 @@ export default function Portfolio() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSkillTab, setActiveSkillTab] = useState("fullstack");
+  const [theme, setTheme] = useState("dark");
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
   useEffect(() => {
     // Disable scrolling while loading
@@ -174,7 +186,7 @@ export default function Portfolio() {
         {loading && <WelcomeScreen onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-teal-500/30 font-sans overflow-x-hidden">
+      <div className="min-h-screen bg-page text-ink selection:bg-accent-strong/30 font-sans overflow-x-hidden">
         {/* Dynamic Background */}
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-teal-600/10 blur-[150px]" />
@@ -183,7 +195,7 @@ export default function Portfolio() {
         </div>
 
         {/* Navbar */}
-        <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-[#020617]/80 backdrop-blur-xl border-b border-white/5 py-4 shadow-2xl' : 'bg-transparent py-6'}`}>
+        <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-nav backdrop-blur-xl border-b border-glass-border py-4 shadow-2xl' : 'bg-transparent py-6'}`}>
           <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
@@ -194,30 +206,41 @@ export default function Portfolio() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-indigo-500 flex items-center justify-center text-white font-black group-hover:scale-105 transition-transform shadow-lg shadow-teal-500/20">
                 CB
               </div>
-              <span>Charmi Bhalodiya<span className="text-teal-400"></span></span>
+              <span>Charmi Bhalodiya<span className="text-accent"></span></span>
             </motion.div>
 
-            <div className="hidden md:flex gap-8 items-center bg-white/5 px-8 py-3 rounded-full border border-white/10 backdrop-blur-md">
+            <div className="hidden md:flex gap-8 items-center bg-glass px-8 py-3 rounded-full border border-glass-border backdrop-blur-md">
               {navLinks.map((link) => (
                 <button 
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
-                  className={`text-sm font-semibold transition-all hover:text-teal-400 ${activeSection === link.id ? 'text-teal-400 scale-105' : 'text-slate-400'}`}
+                  className={`text-sm font-semibold transition-all hover:text-accent ${activeSection === link.id ? 'text-accent scale-105' : 'text-muted'}`}
                 >
                   {link.name}
                 </button>
               ))}
             </div>
 
-            <div className="hidden md:block">
-              <a href="/Bhalodiya_Charmi_Resume.pdf" download className="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-teal-400/50 transition-all text-sm font-semibold flex items-center gap-2 text-white">
+            <div className="hidden md:flex items-center gap-4">
+              <button 
+                onClick={toggleTheme} 
+                className="p-3 rounded-full bg-glass border border-glass-border hover:bg-glass hover:text-accent transition-all text-ink"
+              >
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <a href="/Bhalodiya_Charmi_Resume.pdf" download className="px-6 py-3 rounded-full bg-glass border border-glass-border hover:bg-glass hover:border-teal-400/50 transition-all text-sm font-semibold flex items-center gap-2 text-ink">
                 Resume <ChevronRight size={16} />
               </a>
             </div>
 
-            <button className="md:hidden text-slate-300 p-2 rounded-full bg-white/5 border border-white/10" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            <div className="flex items-center gap-4 md:hidden">
+              <button onClick={toggleTheme} className="text-ink p-2 rounded-full bg-glass border border-glass-border">
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button className="text-ink p-2 rounded-full bg-glass border border-glass-border" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
           </div>
         </nav>
 
@@ -228,7 +251,7 @@ export default function Portfolio() {
               initial={{ opacity: 0, filter: "blur(10px)" }}
               animate={{ opacity: 1, filter: "blur(0px)" }}
               exit={{ opacity: 0, filter: "blur(10px)" }}
-              className="fixed inset-0 z-40 bg-[#020617]/95 backdrop-blur-2xl pt-32 px-8 md:hidden flex flex-col gap-6"
+              className="fixed inset-0 z-40 bg-nav backdrop-blur-2xl pt-32 px-8 md:hidden flex flex-col gap-6"
             >
               {navLinks.map((link, i) => (
                 <motion.button 
@@ -237,7 +260,7 @@ export default function Portfolio() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                   onClick={() => scrollToSection(link.id)}
-                  className="text-3xl font-bold text-left text-slate-300 hover:text-teal-400 border-b border-white/5 pb-4"
+                  className="text-3xl font-bold text-left text-subtle hover:text-accent border-b border-glass-border pb-4"
                 >
                   {link.name}
                 </motion.button>
@@ -248,7 +271,7 @@ export default function Portfolio() {
                 transition={{ delay: 0.5 }}
                 href="/charmi_resume.pdf" 
                 download 
-                className="mt-8 px-6 py-4 text-center rounded-2xl bg-teal-500 text-slate-950 font-bold"
+                className="mt-8 px-6 py-4 text-center rounded-2xl bg-accent-strong text-on-accent font-bold"
               >
                 Download Resume
               </motion.a>
@@ -261,12 +284,12 @@ export default function Portfolio() {
           {/* HERO SECTION */}
           <section id="home" className="min-h-[85vh] flex flex-col md:flex-row items-center gap-12 lg:gap-20">
             <div className="flex-1 space-y-8">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: loading ? 1.2 : 0.1 }} className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: loading ? 1.2 : 0.1 }} className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-glass border border-glass-border backdrop-blur-md">
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-strong"></span>
                 </span>
-                <span className="text-sm font-semibold tracking-wide text-slate-300">Available for new opportunities</span>
+                <span className="text-sm font-semibold tracking-wide text-subtle">Available for new opportunities</span>
               </motion.div>
               
               <motion.h1 
@@ -282,23 +305,23 @@ export default function Portfolio() {
 
               <motion.p 
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: loading ? 1.6 : 0.3 }}
-                className="text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed"
+                className="text-lg md:text-xl text-muted max-w-2xl leading-relaxed"
               >
-                I am a multidisciplinary digital creator bridging the gap between <strong className="text-white">Full-Stack Development</strong>, intuitive <strong className="text-white">UI/UX Design</strong>, and rigorous <strong className="text-white">Quality Assurance</strong>. I build software that not only looks beautiful but performs flawlessly.
+                I am a multidisciplinary digital creator bridging the gap between <strong className="text-ink">Full-Stack Development</strong>, intuitive <strong className="text-ink">UI/UX Design</strong>, and rigorous <strong className="text-ink">Quality Assurance</strong>. I build software that not only looks beautiful but performs flawlessly.
               </motion.p>
 
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: loading ? 1.8 : 0.4 }}
                 className="flex flex-wrap items-center gap-5"
               >
-                <button onClick={() => scrollToSection('projects')} className="px-8 py-4 rounded-full bg-white text-slate-950 hover:bg-teal-400 hover:scale-105 font-bold transition-all shadow-[0_0_40px_-10px_rgba(20,184,166,0.5)]">
+                <button onClick={() => scrollToSection('projects')} className="px-8 py-4 rounded-full bg-white text-on-accent hover:bg-accent hover:scale-105 font-bold transition-all shadow-[0_0_40px_-10px_rgba(20,184,166,0.5)]">
                   Explore My Work
                 </button>
                 <div className="flex gap-4">
-                  <a href="https://github.com/charmi1909" target="_blank" rel="noreferrer" className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:text-teal-400 hover:scale-110 transition-all">
+                  <a href="https://github.com/charmi1909" target="_blank" rel="noreferrer" className="p-4 rounded-full bg-glass border border-glass-border hover:bg-glass hover:text-accent hover:scale-110 transition-all">
                     <GithubIcon size={22} />
                   </a>
-                  <a href="https://www.linkedin.com/in/charmi-bhalodiya-537947310/" target="_blank" rel="noreferrer" className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:text-teal-400 hover:scale-110 transition-all">
+                  <a href="https://www.linkedin.com/in/charmi-bhalodiya-537947310/" target="_blank" rel="noreferrer" className="p-4 rounded-full bg-glass border border-glass-border hover:bg-glass hover:text-accent hover:scale-110 transition-all">
                     <LinkedinIcon size={22} />
                   </a>
                 </div>
@@ -312,28 +335,28 @@ export default function Portfolio() {
               <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/20 via-transparent to-purple-500/20 rounded-full blur-3xl animate-pulse" />
               
               {/* Dynamic Orbital Design */}
-              <div className="absolute inset-8 rounded-full border border-white/5 flex items-center justify-center bg-white/[0.02] backdrop-blur-sm">
-                <div className="absolute inset-4 rounded-full border border-white/10 border-dashed animate-[spin_30s_linear_infinite]" />
+              <div className="absolute inset-8 rounded-full border border-glass-border flex items-center justify-center bg-white/[0.02] backdrop-blur-sm">
+                <div className="absolute inset-4 rounded-full border border-glass-border border-dashed animate-[spin_30s_linear_infinite]" />
                 <div className="absolute inset-16 rounded-full border border-teal-500/20 animate-[spin_40s_linear_infinite_reverse]" />
                 
                 {/* Core Center */}
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-teal-400 to-indigo-600 shadow-[0_0_60px_-10px_rgba(20,184,166,0.8)] flex items-center justify-center text-5xl font-black text-white relative z-10">
+                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-teal-400 to-indigo-600 shadow-[0_0_60px_-10px_rgba(20,184,166,0.8)] flex items-center justify-center text-5xl font-black text-ink relative z-10">
                   CB
                 </div>
 
                 {/* Orbiting Elements */}
                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 z-20">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#020617] p-3 rounded-xl border border-white/10 text-teal-400 shadow-lg">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-page p-3 rounded-xl border border-glass-border text-accent shadow-lg">
                     <Code2 size={24} />
                   </div>
                 </motion.div>
                 <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute inset-10 z-20">
-                  <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-[#020617] p-3 rounded-xl border border-white/10 text-purple-400 shadow-lg">
+                  <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-page p-3 rounded-xl border border-glass-border text-purple-400 shadow-lg">
                     <PenTool size={24} />
                   </div>
                 </motion.div>
                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute inset-20 z-20">
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-[#020617] p-3 rounded-xl border border-white/10 text-rose-400 shadow-lg">
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-page p-3 rounded-xl border border-glass-border text-rose-400 shadow-lg">
                     <Bug size={24} />
                   </div>
                 </motion.div>
@@ -352,56 +375,56 @@ export default function Portfolio() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 {/* Main Bio Card */}
-                <div className="md:col-span-2 bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-[2rem] relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 blur-[80px] rounded-full group-hover:bg-teal-500/20 transition-all duration-700" />
-                  <h3 className="text-2xl font-bold mb-6 text-white flex items-center gap-3">
-                    <User className="text-teal-400" /> My Story
+                <div className="md:col-span-2 bg-glass backdrop-blur-xl border border-glass-border p-8 md:p-12 rounded-[2rem] relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-accent-strong/10 blur-[80px] rounded-full group-hover:bg-accent-strong/20 transition-all duration-700" />
+                  <h3 className="text-2xl font-bold mb-6 text-ink flex items-center gap-3">
+                    <User className="text-accent" /> My Story
                   </h3>
-                  {/* <div className="space-y-6 text-slate-300 text-lg leading-relaxed">
+                  {/* <div className="space-y-6 text-subtle text-lg leading-relaxed">
                     <p>
                       I don't just write code; I craft comprehensive digital products. My journey began with a deep curiosity for how things work, leading me to master the entire software development lifecycle. 
                     </p>
                     <p>
-                      By combining my skills as a <strong className="text-white">Full Stack Developer</strong>, <strong className="text-white">UI/UX Designer</strong>, and <strong className="text-white">QA Engineer</strong>, I ensure that every project I touch is not only technically sound and visually stunning, but also entirely bulletproof and user-friendly. I believe a great product is one that doesn't compromise on any of these three pillars.
+                      By combining my skills as a <strong className="text-ink">Full Stack Developer</strong>, <strong className="text-ink">UI/UX Designer</strong>, and <strong className="text-ink">QA Engineer</strong>, I ensure that every project I touch is not only technically sound and visually stunning, but also entirely bulletproof and user-friendly. I believe a great product is one that doesn't compromise on any of these three pillars.
                     </p>
                     <p>
                       Beyond the screen, I apply my analytical mindset to data-driven Machine Learning problems, and I previously guided aspiring developers as a Web Designing Teaching Assistant.
                     </p>
                   </div> */}
 
-                  <div className="space-y-6 text-slate-300 text-lg leading-relaxed">
+                  <div className="space-y-6 text-subtle text-lg leading-relaxed">
   <p>
-    Hi! I'm <strong className="text-white">Charmi Bhalodiya</strong> from Rajkot, Gujarat, currently pursuing my B.Tech in Computer Engineering at <strong className="text-white">Darshan University</strong> with an expected graduation in 2027. I don't just write code; I craft complete digital products that combine creativity, functionality, and performance. My journey in technology began with a deep curiosity about how modern applications work, which inspired me to explore the entire software development lifecycle.
+    Hi! I'm <strong className="text-ink">Charmi Bhalodiya</strong> from Rajkot, Gujarat, currently pursuing my B.Tech in Computer Engineering at <strong className="text-ink">Darshan University</strong> with an expected graduation in 2027. I don't just write code; I craft complete digital products that combine creativity, functionality, and performance. My journey in technology began with a deep curiosity about how modern applications work, which inspired me to explore the entire software development lifecycle.
   </p>
 
   <p>
-    By combining my skills as a <strong className="text-white">Full Stack Developer</strong>, <strong className="text-white">UI/UX Designer</strong>, and problem solver, I build applications that are not only technically strong but also visually engaging and user-friendly. I enjoy working with technologies like React, Next.js, Angular, Node.js, MongoDB, JavaScript, and TypeScript to create responsive and scalable web experiences. I believe great products are built through the perfect balance of clean design, efficient development, and seamless user experience.
+    By combining my skills as a <strong className="text-ink">Full Stack Developer</strong>, <strong className="text-ink">UI/UX Designer</strong>, and problem solver, I build applications that are not only technically strong but also visually engaging and user-friendly. I enjoy working with technologies like React, Next.js, Angular, Node.js, MongoDB, JavaScript, and TypeScript to create responsive and scalable web experiences. I believe great products are built through the perfect balance of clean design, efficient development, and seamless user experience.
   </p>
 
   <p>
-    Beyond web development, I have a growing interest in <strong className="text-white">Machine Learning</strong> and data-driven applications, where I enjoy exploring how intelligent systems can solve real-world problems. I continuously improve my skills through personal projects, problem-solving, and learning new technologies. When I’m not coding, I enjoy exploring modern design trends, experimenting with creative ideas, and building projects that challenge both my technical and creative abilities.
+    Beyond web development, I have a growing interest in <strong className="text-ink">Machine Learning</strong> and data-driven applications, where I enjoy exploring how intelligent systems can solve real-world problems. I continuously improve my skills through personal projects, problem-solving, and learning new technologies. When I’m not coding, I enjoy exploring modern design trends, experimenting with creative ideas, and building projects that challenge both my technical and creative abilities.
   </p>
 </div>
                 </div>
 
                 {/* Role Cards */}
                 <div className="flex flex-col gap-6">
-                  <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-white/10 p-8 rounded-[2rem] flex-1 backdrop-blur-xl hover:-translate-y-2 transition-transform duration-300">
+                  <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-glass-border p-8 rounded-[2rem] flex-1 backdrop-blur-xl hover:-translate-y-2 transition-transform duration-300">
                     <LayoutTemplate className="text-indigo-400 w-10 h-10 mb-4" />
-                    <h4 className="text-xl font-bold text-white mb-2">Development</h4>
-                    <p className="text-sm text-slate-400">Architecting scalable, clean, and maintainable full-stack systems using modern frameworks.</p>
+                    <h4 className="text-xl font-bold text-ink mb-2">Development</h4>
+                    <p className="text-sm text-muted">Architecting scalable, clean, and maintainable full-stack systems using modern frameworks.</p>
                   </div>
                   
-                  <div className="bg-gradient-to-br from-rose-500/10 to-orange-500/10 border border-white/10 p-8 rounded-[2rem] flex-1 backdrop-blur-xl hover:-translate-y-2 transition-transform duration-300">
+                  <div className="bg-gradient-to-br from-rose-500/10 to-orange-500/10 border border-glass-border p-8 rounded-[2rem] flex-1 backdrop-blur-xl hover:-translate-y-2 transition-transform duration-300">
                     <PenTool className="text-rose-400 w-10 h-10 mb-4" />
-                    <h4 className="text-xl font-bold text-white mb-2">UI / UX Design</h4>
-                    <p className="text-sm text-slate-400">Creating wireframes, interactive prototypes, and designing highly engaging user interfaces.</p>
+                    <h4 className="text-xl font-bold text-ink mb-2">UI / UX Design</h4>
+                    <p className="text-sm text-muted">Creating wireframes, interactive prototypes, and designing highly engaging user interfaces.</p>
                   </div>
 
-                  <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-white/10 p-8 rounded-[2rem] flex-1 backdrop-blur-xl hover:-translate-y-2 transition-transform duration-300">
+                  <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-glass-border p-8 rounded-[2rem] flex-1 backdrop-blur-xl hover:-translate-y-2 transition-transform duration-300">
                     <CheckCircle2 className="text-emerald-400 w-10 h-10 mb-4" />
-                    <h4 className="text-xl font-bold text-white mb-2">QA & Testing</h4>
-                    <p className="text-sm text-slate-400">Implementing strict E2E, unit, and manual testing to deliver entirely bug-free software.</p>
+                    <h4 className="text-xl font-bold text-ink mb-2">QA & Testing</h4>
+                    <p className="text-sm text-muted">Implementing strict E2E, unit, and manual testing to deliver entirely bug-free software.</p>
                   </div>
                 </div>
 
@@ -422,7 +445,7 @@ export default function Portfolio() {
                   <button 
                     key={tab.id}
                     onClick={() => setActiveSkillTab(tab.id)}
-                    className={`px-8 py-4 rounded-full text-sm md:text-base font-bold transition-all flex items-center gap-3 ${activeSkillTab === tab.id ? 'bg-white text-slate-950 shadow-xl scale-105' : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10'}`}
+                    className={`px-8 py-4 rounded-full text-sm md:text-base font-bold transition-all flex items-center gap-3 ${activeSkillTab === tab.id ? 'bg-white text-on-accent shadow-xl scale-105' : 'bg-glass border border-glass-border text-subtle hover:bg-glass'}`}
                   >
                     <tab.icon size={18} /> {tab.label}
                   </button>
@@ -439,11 +462,11 @@ export default function Portfolio() {
                   className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
                 >
                   {skillData[activeSkillTab].map((skill, i) => (
-                    <div key={skill.name} className="bg-white/5 border border-white/10 p-8 rounded-3xl backdrop-blur-xl group hover:border-teal-500/50 transition-colors">
-                      <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal-500/20 transition-all">
-                        <skill.icon className="w-7 h-7 text-white group-hover:text-teal-400" />
+                    <div key={skill.name} className="bg-glass border border-glass-border p-8 rounded-3xl backdrop-blur-xl group hover:border-teal-500/50 transition-colors">
+                      <div className="w-14 h-14 rounded-2xl bg-glass flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-accent-strong/20 transition-all">
+                        <skill.icon className="w-7 h-7 text-ink group-hover:text-accent" />
                       </div>
-                      <h4 className="text-lg font-bold text-white mb-4">{skill.name}</h4>
+                      <h4 className="text-lg font-bold text-ink mb-4">{skill.name}</h4>
                       <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
@@ -479,10 +502,10 @@ export default function Portfolio() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="bg-white/5 border border-white/10 px-6 py-3 rounded-full backdrop-blur-md flex items-center gap-3 hover:bg-white/10 hover:border-orange-500/50 transition-colors"
+                    className="bg-glass border border-glass-border px-6 py-3 rounded-full backdrop-blur-md flex items-center gap-3 hover:bg-glass hover:border-orange-500/50 transition-colors"
                   >
                     <CheckCircle2 className="w-5 h-5 text-orange-400" />
-                    <span className="font-semibold text-slate-200">{skill}</span>
+                    <span className="font-semibold text-ink">{skill}</span>
                   </motion.div>
                 ))}
               </div>
@@ -513,7 +536,7 @@ export default function Portfolio() {
                       
                       {/* Floating UI Elements over image */}
                       <div className="absolute top-6 left-6 z-20 flex gap-2">
-                        <div className="px-3 py-1 bg-black/50 backdrop-blur-md rounded-full text-xs font-bold text-white uppercase tracking-wider border border-white/10">
+                        <div className="px-3 py-1 bg-black/50 backdrop-blur-md rounded-full text-xs font-bold text-ink uppercase tracking-wider border border-glass-border">
                           {project.period}
                         </div>
                       </div>
@@ -521,19 +544,19 @@ export default function Portfolio() {
                     
                     {/* Project Info */}
                     <div className="w-full md:w-1/2 space-y-6">
-                      <h3 className="text-3xl md:text-4xl font-bold text-white">{project.title}</h3>
-                      <p className="text-slate-400 text-lg leading-relaxed">{project.desc}</p>
+                      <h3 className="text-3xl md:text-4xl font-bold text-ink">{project.title}</h3>
+                      <p className="text-muted text-lg leading-relaxed">{project.desc}</p>
                       
                       <div className="flex flex-wrap gap-3 pt-4">
                         {project.tags.map(tag => (
-                          <span key={tag} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-slate-200">
+                          <span key={tag} className="px-4 py-2 rounded-full bg-glass border border-glass-border text-sm font-medium text-ink">
                             {tag}
                           </span>
                         ))}
                       </div>
 
                       <div className="pt-6">
-                        <a href={project.link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold transition-all hover:scale-105 shadow-lg shadow-teal-500/20">
+                        <a href={project.link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent-strong hover:bg-accent text-on-accent font-bold transition-all hover:scale-105 shadow-lg shadow-teal-500/20">
                           View Live Project <ExternalLink size={18} />
                         </a>
                       </div>
@@ -551,7 +574,7 @@ export default function Portfolio() {
               {/* Experience Timeline */}
               <div>
                 <div className="flex items-center gap-4 mb-10">
-                  <div className="w-12 h-12 rounded-full bg-teal-500/20 flex items-center justify-center text-teal-400">
+                  <div className="w-12 h-12 rounded-full bg-accent-strong/20 flex items-center justify-center text-accent">
                     <Briefcase size={24} />
                   </div>
                   <h2 className="text-3xl md:text-4xl font-bold">Experience</h2>
@@ -560,26 +583,26 @@ export default function Portfolio() {
                 <div className="space-y-8 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-teal-500 before:via-white/10 before:to-transparent">
                   
                   <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-[#020617] bg-teal-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10" />
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-teal-500/30 transition-colors ml-4 md:ml-0">
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-[#020617] bg-accent-strong text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10" />
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-glass border border-glass-border p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-teal-500/30 transition-colors ml-4 md:ml-0">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <h3 className="font-bold text-xl text-white">Data Analysis Intern</h3>
-                        <time className="text-teal-400 text-sm font-semibold">Mar 2026</time>
+                        <time className="text-accent text-sm font-semibold">Mar 2026</time>
                       </div>
-                      <p className="text-slate-400 font-medium text-sm mb-4">CodeVeda Technologies</p>
-                      <p className="text-slate-300 text-sm leading-relaxed">Conducted deep data analysis, uncovering trends and anomalies. Assured data quality and performed comprehensive reporting.</p>
+                      <p className="text-muted font-medium text-sm mb-4">CodeVeda Technologies</p>
+                      <p className="text-subtle text-sm leading-relaxed">Conducted deep data analysis, uncovering trends and anomalies. Assured data quality and performed comprehensive reporting.</p>
                     </div>
                   </div>
 
                   <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-[#020617] bg-slate-700 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10" />
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-slate-500/30 transition-colors ml-4 md:ml-0">
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-glass border border-glass-border p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-slate-500/30 transition-colors ml-4 md:ml-0">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <h3 className="font-bold text-xl text-white">Teaching Assistant</h3>
-                        <time className="text-slate-400 text-sm font-semibold">Jul 2025</time>
+                        <time className="text-muted text-sm font-semibold">Jul 2025</time>
                       </div>
-                      <p className="text-slate-400 font-medium text-sm mb-4">Web Designing Course</p>
-                      <p className="text-slate-300 text-sm leading-relaxed">Mentored students in modern web design principles, HTML/CSS semantics, and JavaScript fundamentals.</p>
+                      <p className="text-muted font-medium text-sm mb-4">Web Designing Course</p>
+                      <p className="text-subtle text-sm leading-relaxed">Mentored students in modern web design principles, HTML/CSS semantics, and JavaScript fundamentals.</p>
                     </div>
                   </div>
 
@@ -599,13 +622,13 @@ export default function Portfolio() {
                   
                   <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-[#020617] bg-purple-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10" />
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-purple-500/30 transition-colors ml-4 md:ml-0">
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-glass border border-glass-border p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-purple-500/30 transition-colors ml-4 md:ml-0">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <h3 className="font-bold text-xl text-white">B.Tech Computer Science</h3>
                         <time className="text-purple-400 text-sm font-semibold">Expected 2027</time>
                       </div>
-                      <p className="text-slate-400 font-medium text-sm mb-4">Darshan University</p>
-                      <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-bold text-white">
+                      <p className="text-muted font-medium text-sm mb-4">Darshan University</p>
+                      <div className="inline-block px-4 py-1.5 rounded-full bg-glass border border-glass-border text-sm font-bold text-ink">
                         CGPA: 7.08
                       </div>
                     </div>
@@ -613,13 +636,13 @@ export default function Portfolio() {
 
                   <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-[#020617] bg-slate-700 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10" />
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-slate-500/30 transition-colors ml-4 md:ml-0">
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-glass border border-glass-border p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-slate-500/30 transition-colors ml-4 md:ml-0">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <h3 className="font-bold text-xl text-white">HSC (PCM)</h3>
-                        <time className="text-slate-400 text-sm font-semibold">2023</time>
+                        <time className="text-muted text-sm font-semibold">2023</time>
                       </div>
-                      <p className="text-slate-400 font-medium text-sm mb-4">Shree K.G. Dholakiya School</p>
-                      <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-bold text-white">
+                      <p className="text-muted font-medium text-sm mb-4">Shree K.G. Dholakiya School</p>
+                      <div className="inline-block px-4 py-1.5 rounded-full bg-glass border border-glass-border text-sm font-bold text-ink">
                         Score: 67%
                       </div>
                     </div>
@@ -627,13 +650,13 @@ export default function Portfolio() {
 
                    <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-[#020617] bg-slate-700 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10" />
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-slate-500/30 transition-colors ml-4 md:ml-0">
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] bg-glass border border-glass-border p-6 rounded-2xl backdrop-blur-md shadow-xl hover:border-slate-500/30 transition-colors ml-4 md:ml-0">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <h3 className="font-bold text-xl text-white">SSC</h3>
-                        <time className="text-slate-400 text-sm font-semibold">2021</time>
+                        <time className="text-muted text-sm font-semibold">2021</time>
                       </div>
-                      <p className="text-slate-400 font-medium text-sm mb-4">Shree K.G. Dholakiya School</p>
-                      <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm font-bold text-white">
+                      <p className="text-muted font-medium text-sm mb-4">Shree K.G. Dholakiya School</p>
+                      <div className="inline-block px-4 py-1.5 rounded-full bg-glass border border-glass-border text-sm font-bold text-ink">
                         Score: 93%
                       </div>
                     </div>
@@ -648,28 +671,28 @@ export default function Portfolio() {
           {/* CONTACT SECTION */}
           <section id="contact" className="scroll-mt-32 pb-10">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp}>
-              <div className="bg-gradient-to-b from-white/5 to-transparent border border-white/10 rounded-[3rem] p-10 md:p-20 text-center relative overflow-hidden backdrop-blur-md">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-teal-500/10 blur-[120px] rounded-full pointer-events-none" />
+              <div className="bg-gradient-to-b from-white/5 to-transparent border border-glass-border rounded-[3rem] p-10 md:p-20 text-center relative overflow-hidden backdrop-blur-md">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-accent-strong/10 blur-[120px] rounded-full pointer-events-none" />
                 
                 <h2 className="text-5xl md:text-7xl font-black mb-8 relative z-10 tracking-tight">Let's Build <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-indigo-500">Excellence.</span></h2>
-                <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 relative z-10">
+                <p className="text-muted text-lg md:text-xl max-w-2xl mx-auto mb-12 relative z-10">
                   Whether you need a full-stack architect, a meticulous QA engineer, or a creative UI/UX designer—I'm ready to bring immense value to your team.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-10">
-                  <a href="mailto:charmibhalodiya19@gmail.com" className="px-10 py-5 rounded-full bg-white hover:bg-teal-400 hover:scale-105 text-slate-950 font-bold text-lg transition-all flex items-center gap-3 w-full sm:w-auto justify-center shadow-2xl">
+                  <a href="mailto:charmibhalodiya19@gmail.com" className="px-10 py-5 rounded-full bg-white hover:bg-accent hover:scale-105 text-on-accent font-bold text-lg transition-all flex items-center gap-3 w-full sm:w-auto justify-center shadow-2xl">
                     <Mail size={24} /> Say Hello
                   </a>
-                  <a href="tel:+917770044411" className="px-10 py-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all font-semibold text-lg flex items-center gap-3 w-full sm:w-auto justify-center">
+                  <a href="tel:+917770044411" className="px-10 py-5 rounded-full bg-glass hover:bg-glass border border-glass-border transition-all font-semibold text-lg flex items-center gap-3 w-full sm:w-auto justify-center">
                     +91 7770044411
                   </a>
                 </div>
 
-                <div className="flex items-center justify-center gap-8 mt-20 pt-10 border-t border-white/5 relative z-10">
-                  <a href="https://github.com/charmi1909" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white hover:scale-110 transition-all">
+                <div className="flex items-center justify-center gap-8 mt-20 pt-10 border-t border-glass-border relative z-10">
+                  <a href="https://github.com/charmi1909" target="_blank" rel="noreferrer" className="text-muted hover:text-ink hover:scale-110 transition-all">
                     <GithubIcon size={32} />
                   </a>
-                  <a href="https://www.linkedin.com/in/charmi-bhalodiya-537947310/" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white hover:scale-110 transition-all">
+                  <a href="https://www.linkedin.com/in/charmi-bhalodiya-537947310/" target="_blank" rel="noreferrer" className="text-muted hover:text-ink hover:scale-110 transition-all">
                     <LinkedinIcon size={32} />
                   </a>
                 </div>
@@ -680,10 +703,10 @@ export default function Portfolio() {
         </main>
         
         {/* Footer */}
-        <footer className="py-10 text-center text-slate-500 border-t border-white/5 bg-[#020617] relative z-20">
-          <p className="font-medium text-slate-400">© {new Date().getFullYear()} Charmi Bhalodiya. All rights reserved.</p>
+        <footer className="py-10 text-center text-muted border-t border-glass-border bg-page relative z-20">
+          <p className="font-medium text-muted">© {new Date().getFullYear()} Charmi Bhalodiya. All rights reserved.</p>
           {/* <p className="text-sm mt-3 flex items-center justify-center gap-2">
-            Engineered with React & <span className="px-2 py-1 rounded bg-teal-500/10 text-teal-400 font-semibold border border-teal-500/20">Tailwind CSS</span>
+            Engineered with React & <span className="px-2 py-1 rounded bg-accent-strong/10 text-accent font-semibold border border-teal-500/20">Tailwind CSS</span>
           </p> */}
         </footer>
       </div>
