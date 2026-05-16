@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Terminal, Code2, Database, BrainCircuit, LineChart, 
   Briefcase, GraduationCap, Mail, User,
-  ExternalLink, Menu, X, ChevronRight, MonitorPlay,
-  CheckCircle2, Globe, LayoutTemplate, PenTool, Bug, Layers, Smartphone, FileCheck
+  ExternalLink, Menu, X, ChevronRight,
+  CheckCircle2,LayoutTemplate, PenTool, Bug, Layers, Smartphone, FileCheck
 } from "lucide-react";
 
 const GithubIcon = ({ size = 24, className = "" }) => (
