@@ -15,6 +15,10 @@ module.exports = {
         "accent-soft": "var(--color-accent-soft)",
         surface: "var(--color-surface)",
         "on-accent": "var(--color-on-accent)",
+        glass: "var(--color-glass)",
+        "glass-border": "var(--color-glass-border)",
+        nav: "var(--color-nav)",
+        track: "var(--color-track)",
       },
       boxShadow: {
         panel: "var(--shadow-panel)",
